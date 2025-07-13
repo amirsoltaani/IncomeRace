@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Race: You vs. Elon Musk</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Orbitron for cyberpunk typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <style>
+        /* Custom CSS for cyberpunk effects */
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-green: #00ff66;
+            --neon-magenta: #ff00ff;
+            --neon-red: #ff0055;
+            --neon-yellow: #ffcc00;
+            --dark-bg: #0a0a12;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cyberpunk grid background */
+        .cyberpunk-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(10, 10, 18, 0.9) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(10, 10, 18, 0.9) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                    to bottom,
+                    transparent 50%,
+                    rgba(0, 0, 0, 0.05) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        /* Neon glow effects */
+        .neon-blue {
+            text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 15px var(--neon-blue);
+            color: var(--neon-blue);
+        }
+
+        .neon-green {
+            text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 15px var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .neon-magenta {
+            text-shadow: 0 0 5px var(--neon-magenta), 0 0 10px var(--neon-magenta), 0 0 15px var(--neon-magenta);
+            color: var(--neon-magenta);
+        }
+
+        .neon-red {
+            text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red), 0 0 15px var(--neon-red);
+            color: var(--neon-red);
+        }
+
+        /* Neon borders */
+        .neon-border-blue {
+            box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+        }
+
+        .neon-border-green {
+            box-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .neon-border-magenta {
+            box-shadow: 0 0 5px var(--neon-magenta), 0 0 10px var(--neon-magenta);
+            border: 1px solid var(--neon-magenta);
+        }
+
+        .neon-border-yellow {
+            box-shadow: 0 0 5px var(--neon-yellow), 0 0 10px var(--neon-yellow);
+            border: 1px solid var(--neon-yellow);
+        }
+
+        /* Cyberpunk input fields */
+        .cyberpunk-input {
+            background-color: rgba(10, 10, 18, 0.7);
+            border: 1px solid var(--neon-blue);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .cyberpunk-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+        }
+
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* Glitch effect for text */
+        .glitch {
+            position: relative;
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            14% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+        }
+
+        /* Start button with neon pulse */
+        .start-button {
+            background-color: rgba(10, 10, 18, 0.7);
+            color: var(--neon-magenta);
+            border: 1px solid var(--neon-magenta);
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--neon-magenta);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-button:hover {
+            box-shadow: 0 0 10px var(--neon-magenta), 0 0 20px var(--neon-magenta);
+            text-shadow: 0 0 5px var(--neon-magenta), 0 0 10px var(--neon-magenta);
+            animation: pulse-magenta 1.5s infinite;
+        }
+
+        .start-button:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                    to bottom right,
+                    transparent,
+                    transparent,
+                    transparent,
+                    rgba(255, 0, 255, 0.3),
+                    transparent,
+                    transparent,
+                    transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        /* Stop button with neon pulse */
+        .stop-button {
+            background-color: rgba(10, 10, 18, 0.7);
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--neon-red);
+            position: relative;
+            overflow: hidden;
+            margin-left: 1rem;
+        }
+
+        .stop-button:hover {
+            box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
+            animation: pulse-red 1.5s infinite;
+        }
+
+        .stop-button:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                    to bottom right,
+                    transparent,
+                    transparent,
+                    transparent,
+                    rgba(255, 0, 85, 0.3),
+                    transparent,
+                    transparent,
+                    transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes pulse-magenta {
+            0% {
+                box-shadow: 0 0 10px var(--neon-magenta), 0 0 20px var(--neon-magenta);
+            }
+            50% {
+                box-shadow: 0 0 15px var(--neon-magenta), 0 0 30px var(--neon-magenta);
+            }
+            100% {
+                box-shadow: 0 0 10px var(--neon-magenta), 0 0 20px var(--neon-magenta);
+            }
+        }
+
+        /* Pause button with neon pulse */
+        .pause-button {
+            background-color: rgba(10, 10, 18, 0.7);
+            color: var(--neon-yellow);
+            border: 1px solid var(--neon-yellow);
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px var(--neon-yellow);
+            position: relative;
+            overflow: hidden;
+            margin-left: 1rem;
+            display: none; /* Hidden by default */
+        }
+
+        .pause-button:hover {
+            box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+            text-shadow: 0 0 5px var(--neon-yellow), 0 0 10px var(--neon-yellow);
+            animation: pulse-yellow 1.5s infinite;
+        }
+
+        .pause-button:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                    to bottom right,
+                    transparent,
+                    transparent,
+                    transparent,
+                    rgba(255, 204, 0, 0.3),
+                    transparent,
+                    transparent,
+                    transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes pulse-yellow {
+            0% {
+                box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+            }
+            50% {
+                box-shadow: 0 0 15px var(--neon-yellow), 0 0 30px var(--neon-yellow);
+            }
+            100% {
+                box-shadow: 0 0 10px var(--neon-yellow), 0 0 20px var(--neon-yellow);
+            }
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            }
+            50% {
+                box-shadow: 0 0 15px var(--neon-red), 0 0 30px var(--neon-red);
+            }
+            100% {
+                box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+                top: -100%;
+            }
+            100% {
+                left: 100%;
+                top: 100%;
+            }
+        }
+
+        /* Progress bars */
+        .progress-container {
+            background-color: rgba(10, 10, 18, 0.7);
+            border-radius: 4px;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-user {
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 255, 102, 0.3), rgba(0, 255, 102, 0.7));
+            width: 0%;
+            transition: width 0.1s linear;
+            position: relative;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .progress-bar-elon {
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.3), rgba(0, 243, 255, 0.7));
+            width: 0%;
+            transition: width 0.1s linear;
+            position: relative;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Scanline effect on progress bars */
+        .progress-bar-user::after, .progress-bar-elon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                    to bottom,
+                    transparent 50%,
+                    rgba(255, 255, 255, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 1;
+        }
+
+        /* Timer display */
+        .timer-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--neon-red);
+            text-shadow: 0 0 5px var(--neon-red), 0 0 10px var(--neon-red);
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.8;
+            }
+        }
+
+        /* Result message panel */
+        .result-panel {
+            background-color: rgba(10, 10, 18, 0.8);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 48%, rgba(0, 243, 255, 0.3) 50%, transparent 52%);
+            background-size: 200% 200%;
+            animation: holographic 3s infinite;
+            z-index: -1;
+        }
+
+        @keyframes holographic {
+            0% {
+                background-position: 100% 100%;
+            }
+            50% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+
+        /* Falling binary code animation */
+        .binary-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            color: rgba(0, 255, 0, 0.1);
+            font-family: monospace;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .binary-column {
+            position: absolute;
+            top: -100px;
+            width: 20px;
+            text-align: center;
+            animation: rain linear infinite;
+        }
+
+        @keyframes rain {
+            0% {
+                transform: translateY(-100px);
+            }
+            100% {
+                transform: translateY(calc(100vh + 100px));
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<!-- Cyberpunk background effects -->
+<div class="cyberpunk-bg"></div>
+<div class="scanlines"></div>
+<div class="binary-rain" id="binaryRain"></div>
+
+<div class="container mx-auto max-w-4xl">
+    <!-- Header -->
+    <h1 class="text-4xl md:text-6xl font-bold text-center mb-8 glitch neon-magenta">INCOME RACE</h1>
+    <h2 class="text-xl md:text-2xl text-center mb-12 neon-blue">YOU <span class="neon-red">VS</span> ELON MUSK</h2>
+
+    <!-- Input Form -->
+    <div class="mb-12 p-6 bg-opacity-30 bg-black rounded-lg neon-border-blue">
+        <form id="incomeForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+                <label for="hourlyWage" class="block text-sm font-medium neon-green">YOUR HOURLY WAGE (USD)</label>
+                <input type="text" inputmode="numeric" id="hourlyWage" class="cyberpunk-input currency-input w-full"
+                       placeholder="Enter your hourly wage" required>
+            </div>
+            <div class="space-y-2">
+                <label for="financialGoal" class="block text-sm font-medium neon-green">FINANCIAL GOAL (USD)</label>
+                <input type="text" inputmode="numeric" id="financialGoal" class="cyberpunk-input currency-input w-full"
+                       placeholder="Enter your financial goal" required>
+            </div>
+            <div class="md:col-span-2 flex justify-center mt-4">
+                <button type="submit" id="startButton" class="start-button">INITIATE SEQUENCE</button>
+                <button type="button" id="pauseButton" class="pause-button">PAUSE</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="mb-8 text-center">
+        <div id="timerDisplay" class="timer-display">00:00:00</div>
+        <p class="text-sm neon-red">ELAPSED TIME</p>
+    </div>
+
+    <!-- Progress Bars Section -->
+    <div class="space-y-8 mb-12">
+        <!-- User Progress -->
+        <div class="space-y-2">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-medium neon-green">YOUR INCOME</h3>
+                <div id="userIncome" class="neon-green">$0.00</div>
+            </div>
+            <div class="progress-container neon-border-green">
+                <div id="userProgressBar" class="progress-bar-user"></div>
+            </div>
+            <div id="userCompletionTime" class="text-sm neon-green hidden"></div>
+        </div>
+
+        <!-- Elon Musk Progress -->
+        <div class="space-y-2">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-medium neon-blue">ELON MUSK'S INCOME</h3>
+                <div id="elonIncome" class="neon-blue">$0.00</div>
+            </div>
+            <div class="progress-container neon-border-blue">
+                <div id="elonProgressBar" class="progress-bar-elon"></div>
+            </div>
+            <div id="elonCompletionTime" class="text-sm neon-blue hidden"></div>
+        </div>
+    </div>
+
+    <!-- Result Message Panel (hidden initially) -->
+    <div id="resultPanel" class="result-panel hidden">
+        <h3 class="text-2xl font-bold text-center mb-4 neon-magenta">GOAL ACHIEVED</h3>
+        <p id="resultMessage" class="text-center text-lg"></p>
+    </div>
+</div>
+
+<script>
+    /**
+     * "1650500" -> "1,650,500"
+     */
+    const addCommas = (value) => value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    /**
+     * Force a leading "$" + thousands-separated number,
+     * keep the caret in the right place,
+     * expose the raw digits in data-raw.
+     */
+    document.querySelectorAll('.currency-input').forEach((input) => {
+        input.addEventListener('input', (e) => {
+            const el = e.target;
+            const startPos = el.selectionStart;
+            const before = el.value;
+
+            // Digits only
+            const raw = before.replace(/\D/g, '');
+
+            // Build formatted value
+            const formatted = raw ? '$' + addCommas(raw) : '$';
+
+            // Insert formatted value
+            el.value = formatted;
+
+            // Caret positions back to where it was before
+            const diff = formatted.length - before.length;
+            let newPos = startPos + diff;
+
+            // Never let the cursor go before the "$"
+            if (newPos < 1) newPos = 1;
+            if (newPos > formatted.length) newPos = formatted.length;
+
+            el.setSelectionRange(newPos, newPos);
+
+            // plain number
+            el.dataset.raw = raw || '0';
+        });
+
+        // shows the $ even when empty
+        if (!input.value.trim()) input.value = '$';
+    });
+
+    // Create binary rain effect
+    function createBinaryRain() {
+        const binaryRain = document.getElementById('binaryRain');
+        const screenWidth = window.innerWidth;
+
+        for (let i = 0; i < 50; i++) {
+            const column = document.createElement('div');
+            column.className = 'binary-column';
+            column.style.left = `${Math.random() * screenWidth}px`;
+            column.style.animationDuration = `${5 + Math.random() * 15}s`;
+
+            // Fill with random 0s and 1s
+            for (let j = 0; j < 20; j++) {
+                const binary = document.createElement('div');
+                binary.textContent = Math.random() > 0.5 ? '1' : '0';
+                column.appendChild(binary);
+            }
+
+            binaryRain.appendChild(column);
+        }
+    }
+
+    // Initialize binary rain
+    createBinaryRain();
+
+    // Global variables
+    let timerInterval;
+    let animationFrameId;
+    let startTime;
+    let pauseTime;
+    let totalPausedTime = 0;
+    let isPaused = false;
+    let userIncomePerSecond = 0;
+    let elonIncomePerSecond = 0;
+    let userTotalIncome = 0;
+    let elonTotalIncome = 0;
+    let financialGoal = 0;
+    let userCompleted = false;
+    let elonCompleted = false;
+    let lastUpdateTime;
+    let isRunning = false;
+
+    // DOM elements
+    const incomeForm = document.getElementById('incomeForm');
+    const hourlyWageInput = document.getElementById('hourlyWage');
+    const financialGoalInput = document.getElementById('financialGoal');
+    const startButton = document.getElementById('startButton');
+    const pauseButton = document.getElementById('pauseButton');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const userProgressBar = document.getElementById('userProgressBar');
+    const elonProgressBar = document.getElementById('elonProgressBar');
+    const userIncome = document.getElementById('userIncome');
+    const elonIncome = document.getElementById('elonIncome');
+    const userCompletionTime = document.getElementById('userCompletionTime');
+    const elonCompletionTime = document.getElementById('elonCompletionTime');
+    const resultPanel = document.getElementById('resultPanel');
+    const resultMessage = document.getElementById('resultMessage');
+
+    // Format currency
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount);
+    }
+
+    // Format time (HH:MM:SS)
+    function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+
+        return [
+            hours.toString().padStart(2, '0'),
+            minutes.toString().padStart(2, '0'),
+            secs.toString().padStart(2, '0')
+        ].join(':');
+    }
+
+    // Update timer display
+    function updateTimer() {
+        if (isPaused) {
+            return (pauseTime - startTime - totalPausedTime) / 1000;
+        }
+
+        const currentTime = new Date().getTime();
+        const elapsedSeconds = (currentTime - startTime - totalPausedTime) / 1000;
+        timerDisplay.textContent = formatTime(elapsedSeconds);
+        return elapsedSeconds;
+    }
+
+    // Update progress bars and income values
+    function updateProgress() {
+        if (isPaused) return;
+
+        const currentTime = new Date().getTime();
+        const elapsedSeconds = (currentTime - startTime - totalPausedTime) / 1000;
+        const timeSinceLastUpdate = lastUpdateTime ? (currentTime - lastUpdateTime) / 1000 : 0;
+
+        // Update income values every second
+        if (!lastUpdateTime || timeSinceLastUpdate >= 1) {
+            userTotalIncome += userIncomePerSecond;
+            elonTotalIncome += elonIncomePerSecond;
+            lastUpdateTime = currentTime;
+
+            // Update display with actual values
+            userIncome.textContent = formatCurrency(userTotalIncome);
+            elonIncome.textContent = formatCurrency(elonTotalIncome);
+        }
+
+        // Interpolate for smooth animation
+        const userInterpolatedIncome = userTotalIncome + (userIncomePerSecond * timeSinceLastUpdate);
+        const elonInterpolatedIncome = elonTotalIncome + (elonIncomePerSecond * timeSinceLastUpdate);
+
+        // Update display with interpolated values
+        userIncome.textContent = formatCurrency(userInterpolatedIncome);
+        elonIncome.textContent = formatCurrency(elonInterpolatedIncome);
+
+        // Update progress bars
+        const userProgress = Math.min((userInterpolatedIncome / financialGoal) * 100, 100);
+        const elonProgress = Math.min((elonInterpolatedIncome / financialGoal) * 100, 100);
+
+        userProgressBar.style.width = `${userProgress}%`;
+        elonProgressBar.style.width = `${elonProgress}%`;
+
+        // Check if goals are reached
+        if (!userCompleted && userInterpolatedIncome >= financialGoal) {
+            userCompleted = true;
+            userCompletionTime.textContent = `Reached ${formatCurrency(financialGoal)} in ${formatTime(elapsedSeconds)}!`;
+            userCompletionTime.classList.remove('hidden');
+            userCompletionTime.classList.add('glitch');
+            checkCompletion(elapsedSeconds);
+        }
+
+        if (!elonCompleted && elonInterpolatedIncome >= financialGoal) {
+            elonCompleted = true;
+            elonCompletionTime.textContent = `Reached ${formatCurrency(financialGoal)} in ${formatTime(elapsedSeconds)}!`;
+            elonCompletionTime.classList.remove('hidden');
+            elonCompletionTime.classList.add('glitch');
+            checkCompletion(elapsedSeconds);
+        }
+
+        // Request next animation frame if still running
+        if (isRunning && !isPaused && !(userCompleted && elonCompleted)) {
+            animationFrameId = requestAnimationFrame(updateProgress);
+        }
+    }
+
+    // Check if both progress bars have reached 100%
+    function checkCompletion(elapsedSeconds) {
+        if (userCompleted && elonCompleted) {
+            clearInterval(timerInterval);
+            cancelAnimationFrame(animationFrameId);
+
+            // Reset start button
+            startButton.textContent = 'INITIATE SEQUENCE';
+            startButton.className = 'start-button';
+            startButton.disabled = false;
+            isRunning = false;
+
+            // Hide pause button
+            pauseButton.style.display = 'none';
+            pauseButton.textContent = 'PAUSE';
+
+            // Show final message
+            resultMessage.innerHTML = `
+                    <span class="neon-green">YOU</span> reached ${formatCurrency(financialGoal)} in <span class="neon-green">${formatTime(parseFloat(userCompletionTime.textContent.match(/in ([\d:]+)!/)[1].split(':').reduce((acc, time, index) => acc + time * Math.pow(60, 2 - index), 0)))}</span><br>
+                    <span class="neon-blue">ELON MUSK</span> reached ${formatCurrency(financialGoal)} in <span class="neon-blue">${formatTime(parseFloat(elonCompletionTime.textContent.match(/in ([\d:]+)!/)[1].split(':').reduce((acc, time, index) => acc + time * Math.pow(60, 2 - index), 0)))}</span>
+                `;
+            resultPanel.classList.remove('hidden');
+        }
+    }
+
+    // Reset the race
+    function resetRace() {
+        if (!isRunning) return;
+
+        // Clear intervals
+        clearInterval(timerInterval);
+        cancelAnimationFrame(animationFrameId);
+
+        // Reset variables
+        isRunning = false;
+        isPaused = false;
+        userTotalIncome = 0;
+        elonTotalIncome = 0;
+        userCompleted = false;
+        elonCompleted = false;
+        lastUpdateTime = null;
+        totalPausedTime = 0;
+
+        // Reset UI
+        userIncome.textContent = '$0.00';
+        elonIncome.textContent = '$0.00';
+        userProgressBar.style.width = '0%';
+        elonProgressBar.style.width = '0%';
+        userCompletionTime.classList.add('hidden');
+        elonCompletionTime.classList.add('hidden');
+        resultPanel.classList.add('hidden');
+        timerDisplay.textContent = '00:00:00';
+
+        // Enable form and reset button
+        hourlyWageInput.disabled = false;
+        financialGoalInput.disabled = false;
+        startButton.textContent = 'INITIATE SEQUENCE';
+        startButton.disabled = false;
+        startButton.className = 'start-button';
+
+        // Hide pause button
+        pauseButton.style.display = 'none';
+        pauseButton.textContent = 'PAUSE';
+    }
+
+    // Start the race
+    function startRace(event) {
+        event.preventDefault();
+
+        // If race is already running, reset it
+        if (isRunning) {
+            resetRace();
+            return;
+        }
+
+        // Get input values
+        const hourlyWage = parseInt(hourlyWageInput.dataset.raw);
+        financialGoal = parseInt(financialGoalInput.dataset.raw);
+
+        // Validate inputs
+        if (isNaN(hourlyWage) || hourlyWage <= 0 || isNaN(financialGoal) || financialGoal <= 0) {
+            alert('Please enter valid positive numbers for hourly wage and financial goal.');
+            return;
+        }
+
+        // Calculate income per second
+        userIncomePerSecond = hourlyWage / 3600;
+        elonIncomePerSecond = 10000000 / 3600; // $10M per hour
+
+        // Reset variables
+        userTotalIncome = 0;
+        elonTotalIncome = 0;
+        userCompleted = false;
+        elonCompleted = false;
+        lastUpdateTime = null;
+        isPaused = false;
+        totalPausedTime = 0;
+        isRunning = true;
+
+        // Reset UI
+        userIncome.textContent = '$0.00';
+        elonIncome.textContent = '$0.00';
+        userProgressBar.style.width = '0%';
+        elonProgressBar.style.width = '0%';
+        userCompletionTime.classList.add('hidden');
+        elonCompletionTime.classList.add('hidden');
+        resultPanel.classList.add('hidden');
+
+        // Disable form and change start button to stop button
+        hourlyWageInput.disabled = true;
+        financialGoalInput.disabled = true;
+        startButton.textContent = 'STOP';
+        startButton.className = 'stop-button';
+
+        // Show pause button
+        pauseButton.style.display = 'inline-block';
+
+        // Start timer
+        startTime = new Date().getTime();
+        timerInterval = setInterval(updateTimer, 1000);
+
+        // Start progress updates using requestAnimationFrame for smooth animation
+        animationFrameId = requestAnimationFrame(updateProgress);
+    }
+
+    // Pause the race
+    function pauseRace() {
+        if (!isRunning || userCompleted && elonCompleted) return;
+
+        if (isPaused) {
+            // Resume the race
+            isPaused = false;
+
+            // Calculate total paused time
+            totalPausedTime += (new Date().getTime() - pauseTime);
+
+            // Update button text
+            pauseButton.textContent = 'PAUSE';
+
+            // Restart intervals
+            timerInterval = setInterval(updateTimer, 1000);
+            animationFrameId = requestAnimationFrame(updateProgress);
+        } else {
+            // Pause the race
+            isPaused = true;
+            pauseTime = new Date().getTime();
+
+            // Update button text
+            pauseButton.textContent = 'RESUME';
+
+            // Clear intervals
+            clearInterval(timerInterval);
+            cancelAnimationFrame(animationFrameId);
+        }
+    }
+
+    // Event listeners
+    incomeForm.addEventListener('submit', startRace);
+    pauseButton.addEventListener('click', pauseRace);
+
+    // Add glitch effect to elements with glitch class
+    document.querySelectorAll('.glitch').forEach(element => {
+        element.addEventListener('mouseover', () => {
+            element.style.animation = 'none';
+            void element.offsetWidth; // Trigger reflow
+            element.style.animation = 'glitch 1s infinite';
+        });
+    });
+</script>
+</body>
+</html>
